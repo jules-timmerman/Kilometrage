@@ -159,6 +159,7 @@ public class Fenetre extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 				listChemin.clear();
 				distancesTot = 0;
+				custom = 0;
 				lblKilo.setText("0");
 				lblChemin.setText("");
 			}
@@ -180,7 +181,8 @@ public class Fenetre extends JFrame{
 				
 				if(date.getMonth() != dateAtm.getMonth()) { // Si changement de mois
 					JOptionPane.showMessageDialog(null, "Total du mois de "+dateAtm.getMonth()+" : "+totMois, "Fin du mois", JOptionPane.INFORMATION_MESSAGE);
-					recapAnnee.append(dateAtm.getMonth()+" : "+String.valueOf(totMois));	
+					recapAnnee.append(dateAtm.getMonth()+" : "+String.valueOf(totMois));
+					recapAnnee.append("\n");
 					recap.setText("");
 					
 					
@@ -197,7 +199,8 @@ public class Fenetre extends JFrame{
 					try(BufferedReader br = Files.newBufferedReader(save, StandardCharsets.UTF_8)){
 						while(br.ready()) {
 							toWrite += br.readLine(); // On reprends contenu Fichier
-							toWrite += "\n";
+							toWrite += (char)13;
+							toWrite += (char)10;
 						}
 					
 					} catch (IOException e1) {
@@ -288,6 +291,18 @@ public class Fenetre extends JFrame{
 			
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		
+		Path save = Paths.get(date.getYear()+".txt"); // Recup data save pour "Annee" Tab
+		if(save.toFile().exists()) { // Uniquement si il existe
+			try(BufferedReader br = Files.newBufferedReader(save)){
+				while(br.ready()) {
+					recapAnnee.append(br.readLine());	
+					recapAnnee.append("\n");
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		
