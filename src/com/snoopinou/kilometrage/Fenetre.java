@@ -39,6 +39,7 @@ public class Fenetre extends JFrame{
 	private int totMois= 0; // Distance total du mois
 	private ArrayList<String> listChemin = new ArrayList<String>(); // Liste destinations successives
 	private ArrayList<Integer> histoDist = new ArrayList<Integer>(); // Historique pour reculer
+	private int custom = 0; // Valeur custom du jour
 	
 	private Path noms = Paths.get("resources/Noms.txt");
 	private Path distances = Paths.get("resources/Distances.txt");
@@ -143,11 +144,11 @@ public class Fenetre extends JFrame{
 		buttonCustom.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				DialogCustom dg = new DialogCustom(null, "Custom",true);
-				int dist = dg.showDialog();
-				lblChemin.setText(lblChemin.getText()+dist+" -> ");
-				listChemin.add("!"+dist+"!");
-				actKilo();				
+				DialogCustom dg = new DialogCustom(null, "Custom", true);	
+				int val = dg.showDialog();
+				custom += val;
+				lblChemin.setText(lblChemin.getText()+val+" -> ");
+				actKilo();
 			}
 		});
 		buttonCustom.setFont(font);
@@ -297,26 +298,15 @@ public class Fenetre extends JFrame{
 		distancesTot = 0;
 		if(listChemin.size() > 1) {
 			for(int i = 1; i < listChemin.size();i++) { // Si plus d'une valeur
-				if(listChemin.get(i).substring(0, 1).equals("!")) {
-					System.out.println("KAKAKAKKAKA");
-					String val = listChemin.get(i).substring(1, listChemin.get(i).indexOf("!", 1));		
-					distancesTot += Integer.valueOf(val);
-				}else if(listChemin.get(i-1).substring(0, 1).equals("!")){
-					System.out.println("KAKA");
-					String val = listChemin.get(i).substring(1, listChemin.get(i-1).indexOf("!", 1));
-					distancesTot += Integer.valueOf(val);
-				}else {
-					
-					System.out.println("KAKAKAKKAKAKAKKIAKAAKA");
-					int depart = mapNom.get(listChemin.get(i-1));
-					int arrive = mapNom.get(listChemin.get(i));
-					
-					distancesTot += tabDistances[depart][arrive];				
-				}
+				int depart = mapNom.get(listChemin.get(i-1));
+				int arrive = mapNom.get(listChemin.get(i));
+				
+				distancesTot += tabDistances[depart][arrive];
 			}
 		}else { // Peut pas faire de calcul si 1 valeur
 			distancesTot = 0;
 		}
+		distancesTot += custom;
 		
 		lblKilo.setText(String.valueOf(distancesTot));
 	}	

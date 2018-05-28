@@ -41,14 +41,12 @@ public class DialogCustom extends JDialog {
 		JPanel contentPane = new JPanel();
 		
 		button.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				setVisible(false);
 			}
 			
 		});
-		jtf.setValue(0);
 		
 		contentPane.setLayout(new MigLayout());
 		
